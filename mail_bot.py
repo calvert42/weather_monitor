@@ -1,6 +1,4 @@
-import os
 import smtplib
-import logging
 import utils
 
 # Logger configuration

@@ -35,7 +35,7 @@ def make_file_logger(name, file):
     return logger
 
 
-def make_api_request(lat, lon, part, units, api_key):
+def make_owmap_request(lat, lon, part, units, api_key):
     base = "https://api.openweathermap.org/data/2.5/onecall?"
     full = base+"lat="+str(lat)+"&lon="+str(lon)+"&exclude=" + \
         part+"&units="+units+"&appid="+api_key
@@ -47,8 +47,8 @@ def send_request(req):
     r = requests.get(req)
     if r.ok:
         logger_utils.info("Request successful :)")
-        weather = r.json()
-        return weather
+        page = r.json()
+        return page
     else:
         logger_utils("Request failed :(")
 

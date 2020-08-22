@@ -1,10 +1,6 @@
-import requests
 import os
-import logging
 import weather_handler
 import mail_bot
-import json
-from geopy.geocoders import Nominatim
 import time
 import utils
 
@@ -21,15 +17,15 @@ units = "metric"
 api_key = os.environ.get('API_WEATHER')
 part = "minutely,daily"
 look_ahead = 2
-total = 4
+total = 1
 current_time = 0
-run_time = 60*60
+run_time = 0
 
 
 def init(city, res_file, units, api_key, part):
     lat, lon = utils.get_location_coordinates(city)
-    request_url = utils.make_api_request(lat, lon, part, units, api_key)
-    weather = utils.send_request(request_url)
+    owmap_request = utils.make_owmap_request(lat, lon, part, units, api_key)
+    weather = utils.send_request(owmap_request)
     utils.save_json_file(weather, res_file)
     weather = utils.open_json_file(res_file)
     logger.info("Initialisation succeeded")
@@ -50,7 +46,8 @@ def main():
     next_temp = wh.get_temperature(next_full_weather)
     temp_is_changing = wh.temperature_is_changing(current_temp, next_temp)
 
-    message = ""
+
+"""     message = ""
     if weather_is_changing:
         message += weather_is_changing + "\n"
 
@@ -61,7 +58,7 @@ def main():
         message += "I'm a bot :)"
 
         mb = mail_bot.Mail_Bot(USER, PASS)
-        mb.send_mail(receiver, message)
+        mb.send_mail(receiver, message) """
 
 
 if __name__ == "__main__":
