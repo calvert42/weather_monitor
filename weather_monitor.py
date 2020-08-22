@@ -15,14 +15,15 @@ logger = utils.make_console_logger("main")
 USER = os.environ.get('BOT_MAIL')
 PASS = os.environ.get('BOT_GOOGLE_APP_PASS')
 receiver = os.environ.get('MY_MAIL')
-city = "vittel, france"
+city = "Paris, France"
 res_file = "data/result.json"
 units = "metric"
 api_key = os.environ.get('API_WEATHER')
 part = "minutely,daily"
 look_ahead = 2
-total = 1
+total = 4
 current_time = 0
+run_time = 60*60
 
 
 def init(city, res_file, units, api_key, part):
@@ -68,4 +69,4 @@ if __name__ == "__main__":
         main()
         current_time += 1
         logger.info(f"Process ran {current_time} time(s)")
-        time.sleep(5)
+        time.sleep(run_time)
