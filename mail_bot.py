@@ -1,14 +1,15 @@
 import smtplib
 import utils
+import os
 
 # Logger configuration
 logger = utils.make_console_logger("mail_bot")
 
 
 class Mail_Bot:
-    def __init__(self, bot_mail, bot_pass):
-        self.bot_mail = bot_mail
-        self.bot_pass = bot_pass
+    def __init__(self):
+        self.bot_mail = os.environ.get('BOT_MAIL')
+        self.bot_pass = os.environ.get('BOT_GOOGLE_APP_PASS')
 
     @staticmethod
     def bot_signature():

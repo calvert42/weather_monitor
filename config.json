@@ -1,0 +1,10 @@
+{
+    "city": "Paris, France",
+    "res_file": "data/result.json",
+    "units": "metric",
+    "part": "minutely,daily",
+    "look_ahead": 1,
+    "total": 1,
+    "current_process": 0,
+    "run_time": 0
+}
