@@ -1,6 +1,6 @@
 {
-    "city": "Paris, France",
-    "res_file": "data/result.json",
+    "location": "Paris, France",
+    "result_file": "data/result.json",
     "units": "metric",
     "part": "minutely,daily",
     "look_ahead": 1,
