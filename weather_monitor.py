@@ -23,9 +23,17 @@ run_time = 0
 
 
 class Weather_Monitor:
-    def __init__(self, weather):
-        self.weather = utils.open_json_file(res_file)
-        logger.info("Initialisation succeeded")
+    def __init__(self):
+        self = self
+
+    @staticmethod
+    def get_weather(city, part, units, api_key, res_file):
+        lat, lon = utils.get_location_coordinates(city)
+        owmap_request = utils.make_owmap_request(
+            lat, lon, part, units, api_key)
+        weather = utils.send_request(owmap_request)
+        utils.save_json_file(weather, res_file)
+        return weather
 
     @staticmethod
     def weather_is_changing(current, hour):
@@ -69,8 +77,9 @@ class Weather_Monitor:
 if __name__ == "__main__":
     while current_time < total:
         current_time += 1
-        weather = utils.get_weather(city, part, units, api_key, res_file)
-        m = Weather_Monitor(weather)
+        m = Weather_Monitor()
+
+        weather = m.get_weather(city, part, units, api_key, res_file)
         h = weather_handler.Weather_Handler(weather, look_ahead)
 
         current_weather = h.get_state(h.current)
