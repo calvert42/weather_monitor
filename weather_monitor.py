@@ -82,9 +82,6 @@ if __name__ == "__main__":
             message += temp_change + "\n"
 
         if len(message) != 0:
-            message += '''I'm a bot :)
-            you can see my source code @ https://github.com/rpotierferry/weather_monitor'''
-
             mb = mail_bot.Mail_Bot(USER, PASS)
             mb.send_mail(receiver, message)
 
