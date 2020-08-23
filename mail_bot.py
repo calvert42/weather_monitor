@@ -15,7 +15,8 @@ class Mail_Bot:
     @staticmethod
     # adds a signature to the end of the mail
     def bot_signature():
-        return '''I'm a bot and I love you :) you can see my source code @ https://github.com/rpotierferry/weather_monitor'''
+        return '''I'm a bot and I love you :)
+        you can see my source code @ https://github.com/rpotierferry/weather_monitor'''
 
     # send the email to the receiver
     def send_mail(self, receiver, message):
