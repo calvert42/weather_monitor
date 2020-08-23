@@ -57,7 +57,7 @@ class Weather_Monitor:
         current_t = int(current_t)
         next_t = int(next_t)
         if current_t > next_t:
-            state = f"Temperature is dropping to from {current_t} to {next_t}."
+            state = f"Temperature is dropping to {current_t} from {next_t}."
             logger.info("Temp dropping")
             return state
         elif next_t > current_t:
@@ -99,6 +99,8 @@ if __name__ == "__main__":
         # check wether the message is empty and sends the update
         # to the receiver
         if len(m.message) != 0:
+            m.message += f'This will happen in {m.look_ahead} hour(s).\n'
+            logger.info(f"Will send {m.message}")
             break
             mb = mail_bot.Mail_Bot()
             mb.send_mail(m.receiver, m.message)
