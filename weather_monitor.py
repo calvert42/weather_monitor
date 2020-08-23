@@ -5,9 +5,9 @@ import time
 import utils
 
 # logging configuration
+logger = utils.make_console_logger("Weather_Monitor")
 
-logger = utils.make_console_logger("main")
-
+# config
 USER = os.environ.get('BOT_MAIL')
 PASS = os.environ.get('BOT_GOOGLE_APP_PASS')
 receiver = os.environ.get('MY_MAIL')
@@ -20,6 +20,7 @@ look_ahead = 5
 total = 1
 current_time = 0
 run_time = 0
+message = ""
 
 
 class Weather_Monitor:
@@ -45,7 +46,7 @@ class Weather_Monitor:
             return None
 
     @staticmethod
-    def temperature_is_changing(current, hour):
+    def temp_is_changing(current, hour):
         current = int(current)
         hour = int(hour)
         if current > hour:
@@ -59,20 +60,6 @@ class Weather_Monitor:
         else:
             return None
 
-    def main(self):
-        """     message = ""
-        if weather_is_changing(current_weather, next_weather):
-            message += weather_is_changing + "\n"
-
-        if temp_is_changing:
-            message += temp_is_changing + "\n"
-
-        if len(message) != 0:
-            message += "I'm a bot :)"
-
-            mb = mail_bot.Mail_Bot(USER, PASS)
-            mb.send_mail(receiver, message) """
-
 
 if __name__ == "__main__":
     while current_time < total:
@@ -83,12 +70,23 @@ if __name__ == "__main__":
         h = weather_handler.Weather_Handler(weather, look_ahead)
 
         current_weather = h.get_state(h.current)
+        next_weather = h.get_state(h.hourly)
+
+        if m.weather_is_changing(current_weather, next_weather):
+            message += m.weather_is_changing(current_weather,
+                                             next_weather) + "\n"
+
+        current_temp = h.get_temperature(h.current)
+        next_temp = h.get_temperature(h.hourly)
+
+        if m.temp_is_changing(current_temp, next_temp):
+            message += m.temp_is_changing(current_temp, next_temp) + "\n"
+
+        if len(message) != 0:
+            message += "I'm a bot :)"
+
+            mb = mail_bot.Mail_Bot(USER, PASS)
+            mb.send_mail(receiver, message)
 
         logger.info(f"Process ran {current_time} time(s)")
         time.sleep(run_time)
-"""
-        wm.weather_is_changing(current_weather, next_weather)
-
-        current_temp = handler.get_temperature(full_weather)
-        next_temp = handler.get_temperature(next_full_weather)
-        wm.temperature_is_changing(current_temp, next_temp) """
