@@ -101,7 +101,6 @@ if __name__ == "__main__":
         if len(m.message) != 0:
             m.message += f'This will happen in {m.look_ahead} hour(s).\n'
             logger.info(f"Will send {m.message}")
-            break
             mb = mail_bot.Mail_Bot()
             mb.send_mail(m.receiver, m.message)
 
