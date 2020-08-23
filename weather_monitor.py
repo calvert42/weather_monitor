@@ -72,18 +72,19 @@ if __name__ == "__main__":
         current_weather = h.get_state(h.current)
         next_weather = h.get_state(h.hourly)
 
-        if m.weather_is_changing(current_weather, next_weather):
-            message += m.weather_is_changing(current_weather,
-                                             next_weather) + "\n"
+        weather_change = m.weather_is_changing(current_weather, next_weather)
+        if weather_change:
+            message += weather_change + "\n"
 
         current_temp = h.get_temperature(h.current)
         next_temp = h.get_temperature(h.hourly)
-
-        if m.temp_is_changing(current_temp, next_temp):
-            message += m.temp_is_changing(current_temp, next_temp) + "\n"
+        temp_change = m.temp_is_changing(current_temp, next_temp)
+        if temp_change:
+            message += temp_change + "\n"
 
         if len(message) != 0:
-            message += "I'm a bot :)"
+            message += '''I'm a bot :)
+            you can see my source code @ https://github.com/rpotierferry/weather_monitor'''
 
             mb = mail_bot.Mail_Bot(USER, PASS)
             mb.send_mail(receiver, message)
