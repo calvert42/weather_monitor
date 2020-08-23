@@ -71,3 +71,12 @@ def get_location_coordinates(location):
     location = geolocator.geocode(location)
     logger_utils.info(f"Fetched coordinates for {location}")
     return location.latitude, location.longitude
+
+
+def get_weather(city, part, units, api_key, res_file):
+    lat, lon = get_location_coordinates(city)
+    owmap_request = make_owmap_request(
+        lat, lon, part, units, api_key)
+    weather = send_request(owmap_request)
+    save_json_file(weather, res_file)
+    return weather

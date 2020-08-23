@@ -23,30 +23,37 @@ run_time = 0
 
 
 class Weather_Monitor:
-    def __init__(self, weather=None):
-        lat, lon = utils.get_location_coordinates(city)
-        owmap_request = utils.make_owmap_request(
-            lat, lon, part, units, api_key)
-        weather = utils.send_request(owmap_request)
-        utils.save_json_file(weather, res_file)
+    def __init__(self, weather):
         self.weather = utils.open_json_file(res_file)
         logger.info("Initialisation succeeded")
 
+    @staticmethod
+    def weather_is_changing(current, hour):
+        if current != hour:
+            state = f"Weather is changing to {hour}"
+            logger.info(f"Weather change: {hour}")
+            return state
+        else:
+            return None
+
+    @staticmethod
+    def temperature_is_changing(current, hour):
+        current = int(current)
+        hour = int(hour)
+        if current > hour:
+            state = f"Temperature is dropping to from {current} to {hour}."
+            logger.info("Temp dropping")
+            return state
+        elif hour > current:
+            state = f"Temperature is rising from {current} to {hour}"
+            logger.info("Temp rising")
+            return state
+        else:
+            return None
+
     def main(self):
-
-        wh = weather_handler.Weather_Handler(self.weather)
-        full_weather = wh.get_full_current_weather()
-        next_full_weather = wh.get_full_hourly_weather((look_ahead - 1))
-        current_weather = wh.get_weather_state(full_weather)
-        next_weather = wh.get_weather_state(next_full_weather)
-        weather_is_changing = wh.weather_is_changing(
-            current_weather, next_weather)
-        current_temp = wh.get_temperature(full_weather)
-        next_temp = wh.get_temperature(next_full_weather)
-        temp_is_changing = wh.temperature_is_changing(current_temp, next_temp)
-
         """     message = ""
-        if weather_is_changing:
+        if weather_is_changing(current_weather, next_weather):
             message += weather_is_changing + "\n"
 
         if temp_is_changing:
@@ -61,8 +68,18 @@ class Weather_Monitor:
 
 if __name__ == "__main__":
     while current_time < total:
-        wm = Weather_Monitor()
-        wm.main()
         current_time += 1
+        weather = utils.get_weather(city, part, units, api_key, res_file)
+        m = Weather_Monitor(weather)
+        h = weather_handler.Weather_Handler(weather, look_ahead)
+
+        current_weather = h.get_state(h.current)
+
         logger.info(f"Process ran {current_time} time(s)")
         time.sleep(run_time)
+"""
+        wm.weather_is_changing(current_weather, next_weather)
+
+        current_temp = handler.get_temperature(full_weather)
+        next_temp = handler.get_temperature(next_full_weather)
+        wm.temperature_is_changing(current_temp, next_temp) """
