@@ -22,13 +22,12 @@ class Weather_Monitor:
         self.run_time = config['run_time']
         self.message = ""
 
-    @staticmethod
-    def get_weather(city, part, units, api_key, res_file):
-        lat, lon = utils.get_location_coordinates(city)
+    def get_weather(self):
+        lat, lon = utils.get_location_coordinates(self.city)
         owmap_request = utils.make_owmap_request(
-            lat, lon, part, units, api_key)
+            lat, lon, self.part, self.units, self.api_key)
         weather = utils.send_request(owmap_request)
-        utils.save_json_file(weather, res_file)
+        utils.save_json_file(weather, self.res_file)
         return weather
 
     @staticmethod
@@ -62,7 +61,7 @@ if __name__ == "__main__":
     while m.current_process < m.total:
         m.current_process += 1
 
-        weather = m.get_weather(m.city, m.part, m.units, m.api_key, m.res_file)
+        weather = m.get_weather()
         h = weather_handler.Weather_Handler(weather, m.look_ahead)
 
         current_weather = h.get_state(h.current)
@@ -79,6 +78,7 @@ if __name__ == "__main__":
             m.message += temp_change + "\n"
 
         if len(m.message) != 0:
+            break
             mb = mail_bot.Mail_Bot()
             mb.send_mail(m.receiver, m.message)
 
