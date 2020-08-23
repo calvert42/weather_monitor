@@ -5,6 +5,5 @@
     "part": "minutely,daily",
     "look_ahead": 1,
     "total": 6,
-    "current_process": 0,
     "run_time": 3600
 }

@@ -24,15 +24,15 @@ class Weather_Monitor:
         self.look_ahead = config['look_ahead']
         # number of time the bot is supposed to send updates
         self.total = config['total']
-        # current update number
-        self.current_process = config['current_process']
         # how long should the bot wait between runs
         self.run_time = config['run_time']
+        # current update number
+        self.current_process = 0
         # empty message for initialisation
         self.message = ""
 
     def get_weather(self):
-        # get the location coordinates and sends a request to OW api
+        # get the location coordinates and sends a request to OWM api
         # returns a dic containing the weather data
         lat, lon = utils.get_location_coordinates(self.location)
         owmap_request = utils.make_owmap_request(
@@ -73,7 +73,6 @@ if __name__ == "__main__":
     # initialise the monitor
     m = Weather_Monitor(config)
     while m.current_process < m.total:
-        m.current_process += 1
 
         # get the weather data and send them to a handler
         weather = m.get_weather()
@@ -103,6 +102,8 @@ if __name__ == "__main__":
             logger.info(f"Will send {m.message}")
             mb = mail_bot.Mail_Bot()
             mb.send_mail(m.receiver, m.message)
+        m.message = ""
+        m.current_process += 1
 
         logger.info(f"Process ran {m.current_process} time(s)")
         time.sleep(m.run_time)
