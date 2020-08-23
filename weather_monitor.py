@@ -37,24 +37,24 @@ class Weather_Monitor:
         return weather
 
     @staticmethod
-    def weather_is_changing(current, hour):
-        if current != hour:
-            state = f"Weather is changing to {hour}"
-            logger.info(f"Weather change: {hour}")
+    def weather_is_changing(current_w, next_w):
+        if current_w != next_w:
+            state = f"Weather is changing to {next_w}"
+            logger.info(f"Weather change: {next_w}")
             return state
         else:
             return None
 
     @staticmethod
-    def temp_is_changing(current, hour):
-        current = int(current)
-        hour = int(hour)
-        if current > hour:
-            state = f"Temperature is dropping to from {current} to {hour}."
+    def temp_is_changing(current_t, next_t):
+        current_t = int(current_t)
+        next_t = int(next_t)
+        if current_t > next_t:
+            state = f"Temperature is dropping to from {current_t} to {next_t}."
             logger.info("Temp dropping")
             return state
-        elif hour > current:
-            state = f"Temperature is rising from {current} to {hour}"
+        elif next_t > current_t:
+            state = f"Temperature is rising from {current_t} to {next_t}"
             logger.info("Temp rising")
             return state
         else:
@@ -71,7 +71,6 @@ if __name__ == "__main__":
 
         current_weather = h.get_state(h.current)
         next_weather = h.get_state(h.hourly)
-
         weather_change = m.weather_is_changing(current_weather, next_weather)
         if weather_change:
             message += weather_change + "\n"
