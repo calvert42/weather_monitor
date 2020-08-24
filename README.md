@@ -1,7 +1,7 @@
-This is a bot script that send weather update to a specified email address in case the weather will be changing over a time period.
+This is a bot script that sends weather update to a specified email address in case the weather is predicted to change over a time period.
 
-By default, it will run every hour for a total of six times. The time period it will check will be the next hour.
-If it detects that the weather is changing (temperature of precipitations ofr ex) it will send an email specifying the expected weather changes to the specified user.
+By default, it will run every hour for 6 hours. The time period it will check will be the next hour.
+If it detects that the weather is changing (temperature or precipitations for ex) it will send an email specifying the expected weather changes to the specified user.
 
 To work locally, the user will have to obtain a free API key at https://openweathermap.org/api and set the corresponding environments variables (or change the code accordingly)
 

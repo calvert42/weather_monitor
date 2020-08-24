@@ -24,10 +24,10 @@ class Weather_Monitor:
         self.look_ahead = config['look_ahead']
         # number of time the bot is supposed to send updates
         self.total = config['total']
-        # how long should the bot wait between runs
+        # how long should the bot wait between runs, specified in seconds
         self.run_time = config['run_time']
         # current update number
-        self.current_process = 0
+        self.current_process = 1
         # empty message for initialisation
         self.message_elements = []
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     config = utils.open_json_file("config.json")
     # initialise the monitor
     m = Weather_Monitor(config)
-    while m.current_process < m.total:
+    while m.current_process <= m.total:
 
         # get the weather data and send them to a handler
         weather = m.get_weather()
@@ -98,6 +98,7 @@ if __name__ == "__main__":
         # check wether the message is empty and sends the update
         # to the receiver
         if len(m.message_elements) != 0:
+            # this lines adds the subject of the email
             m.message_elements.insert(
                 0, f"Weather will change in the next {m.look_ahead} hour(s)")
             mb = mail_bot.Mail_Bot()
@@ -106,4 +107,8 @@ if __name__ == "__main__":
         m.current_process += 1
 
         logger.info(f"Process ran {m.current_process} time(s)")
-        time.sleep(m.run_time)
+        if m.current_process < m.total:
+            logger.info("Process is still running")
+            time.sleep(m.run_time)
+        else:
+            logger.info("Processed finished")
