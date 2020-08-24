@@ -29,7 +29,7 @@ class Weather_Monitor:
         # current update number
         self.current_process = 0
         # empty message for initialisation
-        self.message = ""
+        self.message_elements = []
 
     def get_weather(self):
         # get the location coordinates and sends a request to OWM api
@@ -45,8 +45,8 @@ class Weather_Monitor:
     # check wether the weather will be changing during the time period
     def weather_is_changing(current_w, next_w):
         if current_w != next_w:
-            state = f"Weather is changing to {next_w}"
-            logger.info(f"Weather change: {next_w}")
+            state = f"Weather is changing from {current_w} to {next_w}\n"
+            logger.info(f"Weather change: > {next_w}")
             return state
         else:
             return None
@@ -57,12 +57,12 @@ class Weather_Monitor:
         current_t = int(current_t)
         next_t = int(next_t)
         if current_t > next_t:
-            state = f"Temperature is dropping to {current_t} from {next_t}."
-            logger.info("Temp dropping")
+            state = f"Temperature will be dropping to {current_t} from {next_t}.\n"
+            logger.info(f"Temp dropping > {next_t}")
             return state
         elif next_t > current_t:
-            state = f"Temperature is rising from {current_t} to {next_t}"
-            logger.info("Temp rising")
+            state = f"Temperature will be rising from {current_t} to {next_t}.\n"
+            logger.info(f"Temp rising > {next_t}")
             return state
         else:
             return None
@@ -85,7 +85,7 @@ if __name__ == "__main__":
         weather_change = m.weather_is_changing(
             current_weather, next_weather)
         if weather_change:
-            m.message += weather_change + "\n"
+            m.message_elements.append(weather_change)
 
         # check wether the temperature will be changing
         # and update the monitor's response
@@ -93,16 +93,16 @@ if __name__ == "__main__":
         next_temp = h.get_temperature(h.hourly)
         temp_change = m.temp_is_changing(current_temp, next_temp)
         if temp_change:
-            m.message += temp_change + "\n"
+            m.message_elements.append(temp_change)
 
         # check wether the message is empty and sends the update
         # to the receiver
-        if len(m.message) != 0:
-            m.message += f'This will happen in {m.look_ahead} hour(s).\n'
-            logger.info(f"Will send {m.message}")
+        if len(m.message_elements) != 0:
+            m.message_elements.insert(
+                0, f"Weather will change in the next {m.look_ahead} hour(s)")
             mb = mail_bot.Mail_Bot()
-            mb.send_mail(m.receiver, m.message)
-        m.message = ""
+            mb.send_mail(m.receiver, m.message_elements)
+        m.message_elements = []
         m.current_process += 1
 
         logger.info(f"Process ran {m.current_process} time(s)")
